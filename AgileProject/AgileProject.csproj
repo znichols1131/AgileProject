@@ -207,14 +207,33 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MovieController.cs" />
     <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111100157347_InitialCreate.cs" />
+    <Compile Include="Migrations\202111100157347_InitialCreate.Designer.cs">
+      <DependentUpon>202111100157347_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111101351130_MovieRatingForeignKey.cs" />
+    <Compile Include="Migrations\202111101351130_MovieRatingForeignKey.Designer.cs">
+      <DependentUpon>202111101351130_MovieRatingForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111101354123_MovieRatingHashSet.cs" />
+    <Compile Include="Migrations\202111101354123_MovieRatingHashSet.Designer.cs">
+      <DependentUpon>202111101354123_MovieRatingHashSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111101356504_Undo.cs" />
+    <Compile Include="Migrations\202111101356504_Undo.Designer.cs">
+      <DependentUpon>202111101356504_Undo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\Rating.cs" />
     <Compile Include="Models\Show.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -309,6 +328,20 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202111100157347_InitialCreate.resx">
+      <DependentUpon>202111100157347_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111101351130_MovieRatingForeignKey.resx">
+      <DependentUpon>202111101351130_MovieRatingForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111101354123_MovieRatingHashSet.resx">
+      <DependentUpon>202111101354123_MovieRatingHashSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111101356504_Undo.resx">
+      <DependentUpon>202111101356504_Undo.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
