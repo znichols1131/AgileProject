@@ -45,8 +45,7 @@ namespace AgileProject.Controllers
 
             foreach(Content c in contentList)
             {
-                if (c.TypeOfContent == ContentType.Movie)
-                    movies.Add((Movie)c);
+                movies.Add((Movie)c);
             }
 
             if (movies.Count > 0)
@@ -65,6 +64,33 @@ namespace AgileProject.Controllers
 
             if (content != null && content.TypeOfContent == ContentType.Movie)
                 return Ok((Movie) content);
+
+            return NotFound();
+        }
+
+
+        // GET BY MINIMUM RATING
+        // api/Movie/
+        /// <summary>
+        /// Retrieves all movies that exceed the minimum rating.
+        /// </summary>
+        /// <param name="minRating"></param>
+        /// <returns></returns>
+        [Route("api/Movie/GetByMinRating")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetByMinimumRating(double minRating)
+        {
+            List<Content> contentList = await _context.ContentList.Where(c => c.TypeOfContent == ContentType.Movie).ToListAsync();
+            List<Movie> movies = new List<Movie>();
+
+            foreach (Content c in contentList)
+            {
+                if(c.GetAverageRating() >= minRating)
+                    movies.Add((Movie)c);
+            }
+
+            if (movies.Count > 0)
+                return Ok(movies);
 
             return NotFound();
         }
