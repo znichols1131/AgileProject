@@ -18,7 +18,7 @@ namespace AgileProject.Models
         [MaxLength(240, ErrorMessage = "Error: reviews must be 240 characters or less.")]
         public string Review { get; set; }
 
-        [ForeignKey("User")]
+        //[ForeignKey("UserId")]
         public Guid UserId { get; set; }
     }
 }
