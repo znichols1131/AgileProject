@@ -6,12 +6,12 @@ using System.Web;
 
 namespace AgileProject.Models
 {
-    public class Show
+    public class Show : Content
     {
-        [Key]
-        public int ShowId { get; set; }
-        public string Title { get; set; }
         public int NumberOfSeasons { get; set; }
-        public string Description { get; set; }
+        public Show()
+        {
+            TypeOfContent = ContentType.Show;
+        }
     }
 }
