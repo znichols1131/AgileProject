@@ -7,33 +7,14 @@ using System.Web;
 
 namespace AgileProject.Models
 {
-    public class Movie
+    public class Movie : Content
     {
-        [Key]
-        public int MovieId { get; set; }
-        
-        [Required, MaxLength(240, ErrorMessage = "Error: Movie title must be 240 characters or less.")]
-        public string Title { get; set; }
+        [Range(0.0d, 1260.0, ErrorMessage = "Error: Movie length must be between 0 and 1260 minutes. The longest film ever recorded was Amra Ekta Cinema Banabo at 1260 minutes.")]
+        public int LengthOfMovie { get; set; } // In minutes
 
-        [Required, MaxLength(240, ErrorMessage = "Error: Movie description must be 240 characters or less")]
-        public string Description { get; set; }
-
-        //[ForeignKey("RatingId")]
-        public virtual List<Rating> Ratings { get; set; } = new List<Rating>();
-
-        public double GetAverageRating()
+        public Movie()
         {
-            double sum = 0.0d;
-
-            if (Ratings.Count == 0)
-                return sum;
-
-            foreach(Rating r in Ratings)
-            {
-                sum += r.Score;
-            }
-
-            return sum / Ratings.Count;
+            TypeOfContent = ContentType.Movie;
         }
     }
 }

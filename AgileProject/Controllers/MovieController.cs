@@ -22,9 +22,11 @@ namespace AgileProject.Controllers
             if (model is null)
                 return BadRequest("Your request body cannot be empty");
 
+            model.TypeOfContent = ContentType.Movie;
+
             if (ModelState.IsValid)
             {
-                _context.Movies.Add(model);
+                _context.ContentList.Add(model);
                 await _context.SaveChangesAsync();
                 return Ok("Movie was created.");
             }
@@ -38,8 +40,19 @@ namespace AgileProject.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAll()
         {
-            List<Movie> movies = await _context.Movies.ToListAsync();
-            return Ok(movies);
+            List<Content> contentList = await _context.ContentList.Where(c => c.TypeOfContent == ContentType.Movie).ToListAsync();
+            List<Movie> movies = new List<Movie>();
+
+            foreach(Content c in contentList)
+            {
+                if (c.TypeOfContent == ContentType.Movie)
+                    movies.Add((Movie)c);
+            }
+
+            if (movies.Count > 0)
+                return Ok(movies);
+
+            return NotFound();
         }
 
 
@@ -48,10 +61,10 @@ namespace AgileProject.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetById([FromUri] int id)
         {
-            Movie movie = await _context.Movies.FindAsync(id);
+            Content content = await _context.ContentList.FindAsync(id);
 
-            if (movie != null)
-                return Ok(movie);
+            if (content != null && content.TypeOfContent == ContentType.Movie)
+                return Ok((Movie) content);
 
             return NotFound();
         }
@@ -63,7 +76,7 @@ namespace AgileProject.Controllers
         public async Task<IHttpActionResult> UpdateById([FromUri] int id, [FromBody] Movie updatedMovie)
         {
             // Check the ids if they match
-            if (id != updatedMovie?.MovieId)
+            if (id != updatedMovie?.ContentId)
                 return BadRequest("Ids do not match.");
 
             // Check model state
@@ -71,15 +84,16 @@ namespace AgileProject.Controllers
                 return BadRequest(ModelState);
 
             // Find the movie in the database
-            Movie oldMovie = await _context.Movies.FindAsync(id);
-
-            // If it doesn't exist, then handle it
-            if (oldMovie is null)
+            Content oldContent = await _context.ContentList.FindAsync(id);
+            if (oldContent is null || oldContent.TypeOfContent != ContentType.Movie)
                 return NotFound();
+
+            Movie oldMovie = (Movie)oldContent;
 
             // Update the movie in the database
             oldMovie.Title = updatedMovie.Title;
             oldMovie.Description = updatedMovie.Description;
+            oldMovie.LengthOfMovie = updatedMovie.LengthOfMovie;
 
             // Save changes
             await _context.SaveChangesAsync();
@@ -93,12 +107,13 @@ namespace AgileProject.Controllers
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteMovie([FromUri] int id)
         {
-            Movie movie = await _context.Movies.FindAsync(id);
-
-            if (movie is null)
+            Content content = await _context.ContentList.FindAsync(id);
+            if (content is null || content.TypeOfContent != ContentType.Movie)
                 return NotFound();
 
-            _context.Movies.Remove(movie);
+            Movie movie = (Movie)content;
+
+            _context.ContentList.Remove(movie);
 
             if (await _context.SaveChangesAsync() > 0)
                 return (Ok("Movie was deleted."));

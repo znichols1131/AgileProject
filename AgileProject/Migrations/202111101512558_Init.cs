@@ -3,10 +3,22 @@ namespace AgileProject.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Init : DbMigration
     {
         public override void Up()
         {
+            CreateTable(
+                "dbo.Contents",
+                c => new
+                    {
+                        ContentId = c.Int(nullable: false, identity: true),
+                        Title = c.String(nullable: false, maxLength: 240),
+                        Description = c.String(nullable: false, maxLength: 240),
+                        TypeOfContent = c.Int(nullable: false),
+                        LengthOfMovie = c.Int(),
+                    })
+                .PrimaryKey(t => t.ContentId);
+            
             CreateTable(
                 "dbo.Ratings",
                 c => new
@@ -14,9 +26,12 @@ namespace AgileProject.Migrations
                         RatingId = c.Int(nullable: false, identity: true),
                         Score = c.Double(nullable: false),
                         Review = c.String(maxLength: 240),
+                        ContentId = c.Int(nullable: false),
                         UserId = c.Guid(nullable: false),
                     })
-                .PrimaryKey(t => t.RatingId);
+                .PrimaryKey(t => t.RatingId)
+                .ForeignKey("dbo.Contents", t => t.ContentId, cascadeDelete: true)
+                .Index(t => t.ContentId);
             
             CreateTable(
                 "dbo.AspNetRoles",
@@ -94,18 +109,21 @@ namespace AgileProject.Migrations
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.Ratings", "ContentId", "dbo.Contents");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.Ratings", new[] { "ContentId" });
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Ratings");
+            DropTable("dbo.Contents");
         }
     }
 }

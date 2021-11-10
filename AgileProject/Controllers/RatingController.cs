@@ -22,14 +22,18 @@ namespace AgileProject.Controllers
             if (model is null)
                 return BadRequest("Your request body cannot be empty");
         
-            if(ModelState.IsValid)
-            {
-                _context.Ratings.Add(model);
-                await _context.SaveChangesAsync();
-                return Ok("Rating was created.");
-            }
+            if(!ModelState.IsValid)            
+                return BadRequest(ModelState);
 
-            return BadRequest(ModelState);
+            Content content = await _context.ContentList.FindAsync(model.ContentId);
+            if (content is null)
+                return NotFound();
+
+            _context.Ratings.Add(model);
+            content.Ratings.Add(model);
+            model.Content = content;
+            await _context.SaveChangesAsync();
+            return Ok("Rating was created.");            
         }
 
 
@@ -38,7 +42,7 @@ namespace AgileProject.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAll()
         {
-            List<Rating> ratings = await _context.Ratings.ToListAsync();
+            List<Rating> ratings = await _context.Ratings.Include(r => r.Content).ToListAsync();
             return Ok(ratings);
         }
 
@@ -48,7 +52,8 @@ namespace AgileProject.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetById([FromUri] int id)
         {
-            Rating rating = await _context.Ratings.FindAsync(id);
+            //Rating rating = await _context.Ratings.FindAsync(id);
+            Rating rating = await _context.Ratings.Include(r => r.Content).FirstOrDefaultAsync(i => i.RatingId == id);
 
             if (rating != null)
                 return Ok(rating);
@@ -98,6 +103,11 @@ namespace AgileProject.Controllers
             if (rating is null)
                 return NotFound();
 
+            Content content = await _context.ContentList.FindAsync(rating.ContentId);
+            if (content is null)
+                return NotFound();
+
+            content.Ratings.Remove(rating);
             _context.Ratings.Remove(rating);
 
             if (await _context.SaveChangesAsync() > 0)            

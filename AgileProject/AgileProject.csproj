@@ -213,25 +213,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202111100157347_InitialCreate.cs" />
-    <Compile Include="Migrations\202111100157347_InitialCreate.Designer.cs">
-      <DependentUpon>202111100157347_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111101351130_MovieRatingForeignKey.cs" />
-    <Compile Include="Migrations\202111101351130_MovieRatingForeignKey.Designer.cs">
-      <DependentUpon>202111101351130_MovieRatingForeignKey.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111101354123_MovieRatingHashSet.cs" />
-    <Compile Include="Migrations\202111101354123_MovieRatingHashSet.Designer.cs">
-      <DependentUpon>202111101354123_MovieRatingHashSet.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111101356504_Undo.cs" />
-    <Compile Include="Migrations\202111101356504_Undo.Designer.cs">
-      <DependentUpon>202111101356504_Undo.cs</DependentUpon>
+    <Compile Include="Migrations\202111101512558_Init.cs" />
+    <Compile Include="Migrations\202111101512558_Init.Designer.cs">
+      <DependentUpon>202111101512558_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Content.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\Rating.cs" />
@@ -330,17 +319,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202111100157347_InitialCreate.resx">
-      <DependentUpon>202111100157347_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111101351130_MovieRatingForeignKey.resx">
-      <DependentUpon>202111101351130_MovieRatingForeignKey.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111101354123_MovieRatingHashSet.resx">
-      <DependentUpon>202111101354123_MovieRatingHashSet.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111101356504_Undo.resx">
-      <DependentUpon>202111101356504_Undo.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202111101512558_Init.resx">
+      <DependentUpon>202111101512558_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
