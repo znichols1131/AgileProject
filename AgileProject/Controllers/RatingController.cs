@@ -1,6 +1,7 @@
 ﻿using AgileProject.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,7 +19,17 @@ namespace AgileProject.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> PostRating([FromBody] Rating model)
         {
+            if (model is null)
+                return BadRequest("Your request body cannot be empty");
+        
+            if(ModelState.IsValid)
+            {
+                _context.Ratings.Add(model);
+                await _context.SaveChangesAsync();
+                return Ok("Rating was created.");
+            }
 
+            return BadRequest(ModelState);
         }
 
 
@@ -27,7 +38,8 @@ namespace AgileProject.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAll()
         {
-
+            List<Rating> ratings = await _context.Ratings.ToListAsync();
+            return Ok(ratings);
         }
 
 
@@ -36,7 +48,12 @@ namespace AgileProject.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetById([FromUri] int id)
         {
+            Rating rating = await _context.Ratings.FindAsync(id);
 
+            if (rating != null)
+                return Ok(rating);
+
+            return NotFound();
         }
 
 
@@ -45,7 +62,29 @@ namespace AgileProject.Controllers
         [HttpPut]
         public async Task<IHttpActionResult> UpdateById([FromUri] int id, [FromBody] Rating updatedRating)
         {
+            // Check the ids if they match
+            if (id != updatedRating?.RatingId)
+                return BadRequest("Ids do not match.");
 
+            // Check model state
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Find the rating in the database
+            Rating oldRating = await _context.Ratings.FindAsync(id);
+
+            // If it doesn't exist, then handle it
+            if (oldRating is null)
+                return NotFound();
+
+            // Update the rating in the database
+            oldRating.Score = updatedRating.Score;
+            oldRating.Review = updatedRating.Review;
+
+            // Save changes
+            await _context.SaveChangesAsync();
+
+            return Ok("Rating was updated");
         }
 
 
@@ -54,7 +93,17 @@ namespace AgileProject.Controllers
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteRating([FromUri] int id)
         {
+            Rating rating = await _context.Ratings.FindAsync(id);
 
+            if (rating is null)
+                return NotFound();
+
+            _context.Ratings.Remove(rating);
+
+            if (await _context.SaveChangesAsync() > 0)            
+                return (Ok("Rating was deleted."));
+            
+            return InternalServerError();
         }
     }
 }
